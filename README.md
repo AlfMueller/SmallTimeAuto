@@ -1,4 +1,6 @@
-Employee Presence Tracker für ESP32
+Employee Presence Tracker for ESP32
+
+Mitarbeiter Anwesenheits tracker für den ESP32
 
 Dieses Projekt verwendet einen ESP32 und das ESP32Ping- und HTTPClient-Modul, um die Anwesenheit von Mitarbeitern anhand der IP-Adressen ihrer Geräte zu überwachen. Sobald der Status eines Mitarbeiters (online oder offline) geändert wird, ruft das System eine URL auf, die für den Mitarbeiter spezifisch ist.
 
