@@ -3,7 +3,8 @@ ESP32 überwacht das Netzwerk und schaut ob hinterlegete IP's im Netzwerk sind o
 
 Der Mitarbeiter hat beim einschalten einen status, ändert sich dieser wird der URL aufgerufen 5 x testen (30sek).
 
-Pingt Geräte im LAN und führt impuls für die Arbeitszeiterfassung von smalltime aus.
+Prüft ob definierte Geräte im LAN und ruft eine URL auf wenn sich der status ändert.
 
-Link für SmallTime:
+
+Kann als Addon für SmallTimeverwendet werden.
 https://github.com/it-m-h/SmallTime
