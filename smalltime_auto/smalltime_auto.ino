@@ -1,30 +1,23 @@
-
 #include <WiFi.h>
 #include <ESP32Ping.h>
 #include <HTTPClient.h>
 #include <map>
 
-const char* ssid = "XXX";
-const char* password = "XXX";
-
 struct Employee {
-  IPAddress ip;
   String name;
   String url;
 };
 
-// Definieren Sie hier alle Mitarbeiter
-Employee employees[] = {
-  { IPAddress(10, 10, 82, 65), "Alf", "https://XXXXXX/idtime.php?id=afe70dde279f4657" },
-  { IPAddress(10, 10, 82, 114), "Martina", "https://XXXXXX/idtime.php?id=4180c1f1590d6dfa" },
-  // Fügen Sie hier weitere Mitarbeiter hinzu
+const char* ssid = "XXXX";
+const char* password = "XXXX";
+
+std::map<IPAddress, Employee> employeeMap = {
+  { IPAddress(10, 10, 82, 65), {"Alf", "https://XXXXX.ch/idtime.php?id=afe70dde279f4657"}},    // IP name und URL ersetzten
+  { IPAddress(10, 10, 82, 114), {"Martina", "https://XXXX.ch/idtime.php?id=4180c1f1590d6dfa"}}
 };
 
-
-std::map<IPAddress, Employee> employeeMap;
 std::map<IPAddress, bool> employeeStatus;
 std::map<IPAddress, int> employeeCounter;
-bool firstLoop = true;
 
 void setup() {
   Serial.begin(115200);
@@ -39,71 +32,60 @@ void setup() {
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
 
-  // Füllen Sie die Maps mit den Mitarbeiterdaten
-  for (const auto& employee : employees) {
-    employeeMap[employee.ip] = employee;
-    // Prüfen Sie den aktuellen Status und verwenden Sie diesen als Ausgangsstatus
-    bool currentStatus = Ping.ping(employee.ip);
-    employeeStatus[employee.ip] = currentStatus;
-    // Initialisieren Sie den Counter mit 0
-    employeeCounter[employee.ip] = 0;
+  for (const auto& employee : employeeMap) {
+    IPAddress ip = employee.first;
+    bool result = Ping.ping(ip);
+    employeeStatus[ip] = result;
+    employeeCounter[ip] = result ? 5 : 0;
   }
 }
 
 void loop() {
-  for (auto& employee : employeeStatus) {
+  for (auto& employee : employeeMap) {
     IPAddress ip = employee.first;
     bool result = Ping.ping(ip);
-    if (result == employee.second) {
-      // Status is the same, increment counter
-      if (employeeCounter[ip] < 5) {
-        employeeCounter[ip]++;
-      } else {
-        // If status remains the same and counter reached 5, reset the counter
-        employeeCounter[ip] = 0;
-      }
-    } else {
-      // Status changed, reset counter
-      employeeCounter[ip] = 1;
-    }
-    employee.second = result;
 
-    // Check if status changed and counter reached 5
-    if (employeeCounter[ip] == 5 && !firstLoop) {
+    if(result){
+      if(!employeeStatus[ip]) {
+        employeeCounter[ip]++;
+      }
+    }
+    else{
+      if(employeeStatus[ip]){
+        employeeCounter[ip]--;
+      }
+    }
+
+    if((!employeeStatus[ip] && employeeCounter[ip] >= 5) || 
+       (employeeStatus[ip] && employeeCounter[ip] <= 0)) {
+      // Change status and reset counter
+      employeeStatus[ip] = !employeeStatus[ip];
+      employeeCounter[ip] = employeeStatus[ip] ? 5 : 0;
+
+      // Call the URL
       HTTPClient http;
-      http.begin(employeeMap[ip].url);
+      http.begin(employee.second.url);
       int httpCode = http.GET();
       if (httpCode > 0) {
-        Serial.printf("URL called for %s, response: %d\n", employeeMap[ip].name.c_str(), httpCode);
+        Serial.printf("URL called for %s, response: %d\n", employee.second.name.c_str(), httpCode);
       } else {
-        Serial.printf("Failed to call URL for %s\n", employeeMap[ip].name.c_str());
+        Serial.printf("Failed to call URL for %s\n", employee.second.name.c_str());
       }
       http.end();
-
-      // Reset counter after calling the URL
-      employeeCounter[ip] = 0;
     }
   }
 
-  // Set firstLoop to false after the first run
-  if (firstLoop) {
-    firstLoop = false;
-  }
-
-  printEmployeeStatus(); // Ausgabe des Mitarbeiterstatus im Monitor
+  printEmployeeStatus(); 
   delay(30000); // Check every 30 seconds
 }
 
 void printEmployeeStatus() {
   Serial.println("Employee Status:");
   for (const auto& employee : employeeStatus) {
-    Employee emp = employeeMap[employee.first];
     Serial.print("Name: ");
-    Serial.print(emp.name);
+    Serial.print(employeeMap[employee.first].name);
     Serial.print(" - IP: ");
-    Serial.print(emp.ip);
-    Serial.print(" - URL: ");
-    Serial.print(emp.url);
+    Serial.print(employee.first);
     Serial.print(" - Status: ");
     Serial.println(employee.second ? "Online" : "Offline");
   }
