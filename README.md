@@ -19,9 +19,10 @@ Fügen Sie die folgenden Bibliotheken zu Ihrem Arduino IDE hinzu:
 #include <map>
 ```
 
-Konfigurieren Sie die Mitarbeiterinformationen
+Konfigurieren Sie die Mitarbeiterinformationen.
 Erstellen Sie für jeden Mitarbeiter, den Sie überwachen möchten, einen Eintrag in der employeeMap-Variable, die die IP-Adresse, den Namen und die URL des Mitarbeiters enthält.
 
+Info: auf dem Router eine Fixe IP dem Gerät zuweisen.
 
 ```cpp
 std::map<IPAddress, Employee> employeeMap = {
