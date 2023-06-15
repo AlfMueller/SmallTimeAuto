@@ -19,6 +19,8 @@ Fügen Sie die folgenden Bibliotheken zu Ihrem Arduino IDE hinzu:
 #include <map>
 ```
 
+ESP32ping Bibliothek: https://github.com/marian-craciunescu/ESP32Ping
+
 Konfigurieren Sie die Mitarbeiterinformationen.
 Erstellen Sie für jeden Mitarbeiter, den Sie überwachen möchten, einen Eintrag in der employeeMap-Variable, die die IP-Adresse, den Namen und die URL des Mitarbeiters enthält.
 
