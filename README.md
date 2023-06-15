@@ -45,6 +45,26 @@ const char* password = "yourPassword";
 Nutzung
 Laden Sie den Code auf Ihren ESP32 hoch. Der ESP32 beginnt dann mit der Überwachung der Anwesenheit der Mitarbeiter anhand der festgelegten IP-Adressen und ruft die entsprechende URL auf, sobald sich der Status eines Mitarbeiters ändert.
 
+
+Funktion:
+
+Das in diesem Projekt implementierte Anwesenheitssystem basiert auf der Überprüfung der Netzwerkverfügbarkeit eines bestimmten Geräts (z.B. eines Mobiltelefons oder Computers), das einem Mitarbeiter zugeordnet ist.
+
+
+Initialisierung: Beim Start des ESP32 wird der aktuelle Status (Anwesenheit oder Abwesenheit) eines jeden Mitarbeiters erfasst und als sein grundlegender Status festgelegt. Dabei wird eine Zählvariable mit 5 für Anwesenheit oder 0 für Abwesenheit initialisiert.
+
+
+Überprüfung der Anwesenheit: Der ESP32 sendet in regelmäßigen Abständen Ping-Anfragen an die IP-Adresse jedes Mitarbeiters. Der Status jeder IP-Adresse wird dann auf der Grundlage der Antwort aktualisiert.
+
+
+Statusänderung und URL-Aufruf: Wenn der Mitarbeiter anwesend ist und seine IP-Adresse nicht gefunden wird, wird die Zählvariable um eins verringert. Wenn der Mitarbeiter abwesend ist und seine IP-Adresse gefunden wird, wird die Zählvariable um eins erhöht. Sobald die Zählvariable entweder 5 (für Anwesenheit) oder 0 (für Abwesenheit) erreicht, wird der zugehörige URL-Aufruf ausgeführt und der grundlegende Status wird entsprechend geändert.
+
+Sicherheitsüberprüfung: Um Fehlalarme zu vermeiden (z.B. wenn das Gerät eines Mitarbeiters kurzzeitig das Netzwerk verlässt), wird der URL-Aufruf erst ausgeführt, wenn die An- oder Abwesenheit des Mitarbeiters fünf aufeinanderfolgende Male bestätigt wurde.
+
+
+Insgesamt bietet dieses System eine einfache, automatisierte Methode zur Überwachung der Anwesenheit von Mitarbeitern und zur Durchführung bestimmter Aktionen (wie z.B. das Aufrufen einer URL) bei Änderungen des Anwesenheitsstatus.
+
+
 Lizenz
 Dieses Projekt steht unter der MIT-Lizenz. Weitere Informationen finden Sie in der Datei LICENSE.
 
