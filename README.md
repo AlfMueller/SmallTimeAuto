@@ -1,15 +1,19 @@
 Employee Presence Tracker for ESP32
 
-Mitarbeiter Anwesenheits tracker für den ESP32
+**Mitarbeiter Anwesenheits Tracker für den ESP32**
 
 Dieses Projekt verwendet einen ESP32 und das ESP32Ping- und HTTPClient-Modul, um die Anwesenheit von Mitarbeitern anhand der IP-Adressen ihrer Geräte zu überwachen. Sobald der Status eines Mitarbeiters (online oder offline) geändert wird, ruft das System eine URL auf, die für den Mitarbeiter spezifisch ist.
 
-Voraussetzungen
+
+**Voraussetzungen**
+
 ESP32 Dev Board
 Arduino IDE
-Zugang zum WLAN, in dem sich die Geräte der Mitarbeiter befinden
-Die URLs, die aufgerufen werden sollen, wenn der Status eines Mitarbeiters geändert wird
-Setup
+Zugang zum WLAN, in dem sich die Geräte der Mitarbeiter befinden.
+Die URLs, die aufgerufen werden sollen, wenn der Status eines Mitarbeiters geändert wird.
+
+**Setup**
+
 Installieren Sie die erforderlichen Bibliotheken
 Fügen Sie die folgenden Bibliotheken zu Ihrem Arduino IDE hinzu:
 ```cpp
@@ -24,7 +28,7 @@ ESP32ping Bibliothek: https://github.com/marian-craciunescu/ESP32Ping
 Konfigurieren Sie die Mitarbeiterinformationen.
 Erstellen Sie für jeden Mitarbeiter, den Sie überwachen möchten, einen Eintrag in der employeeMap-Variable, die die IP-Adresse, den Namen und die URL des Mitarbeiters enthält.
 
-Info: auf dem Router eine Fixe IP dem Gerät zuweisen.
+**Info: auf dem Router eine Fixe IP dem Gerät zuweisen.**
 
 ```cpp
 std::map<IPAddress, Employee> employeeMap = {
@@ -35,7 +39,7 @@ std::map<IPAddress, Employee> employeeMap = {
 ```
 
 
-Konfigurieren Sie die WLAN-Informationen
+**Konfigurieren Sie die WLAN-Informationen**
 Aktualisieren Sie die ssid und password Variablen mit den Informationen Ihres WLANs.
 
 ```cpp
@@ -46,7 +50,7 @@ Nutzung
 Laden Sie den Code auf Ihren ESP32 hoch. Der ESP32 beginnt dann mit der Überwachung der Anwesenheit der Mitarbeiter anhand der festgelegten IP-Adressen und ruft die entsprechende URL auf, sobald sich der Status eines Mitarbeiters ändert.
 
 
-Funktion:
+**Funktion:**
 
 Das in diesem Projekt implementierte Anwesenheitssystem basiert auf der Überprüfung der Netzwerkverfügbarkeit eines bestimmten Geräts (z.B. eines Mobiltelefons oder Computers), das einem Mitarbeiter zugeordnet ist.
 
